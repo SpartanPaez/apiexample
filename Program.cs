@@ -62,20 +62,17 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.Get
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+app.UseSwagger(c =>
 {
-    app.UseSwagger(c =>
+    c.RouteTemplate = "swagger/{documentName}/swagger.json";
+    c.SerializeAsV2 = false;
+    c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
     {
-        c.RouteTemplate = "swagger/{documentName}/swagger.json";
-        c.SerializeAsV2 = false;
-        c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
-        {
-            var filePath = Path.Combine(app.Environment.WebRootPath, "swagger.json");
-            File.WriteAllText(filePath, System.Text.Json.JsonSerializer.Serialize(swaggerDoc));
-        });
+        var filePath = Path.Combine(app.Environment.WebRootPath, "swagger.json");
+        File.WriteAllText(filePath, System.Text.Json.JsonSerializer.Serialize(swaggerDoc));
     });
-    app.UseSwaggerUI();
-}
+});
+app.UseSwaggerUI();
 
 // app.UseHttpsRedirection();
 
