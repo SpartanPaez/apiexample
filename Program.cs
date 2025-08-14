@@ -4,7 +4,18 @@ using WebApi.Infrastructure.Persistence;
 using WebApi.Infrastructure.Persistence.Read;
 using WebApi.Infrastructure.Persistence.Write;
 
+
 var builder = WebApplication.CreateBuilder(args);
+// Configuración de CORS
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<SpartanDbContext>(options =>
@@ -43,7 +54,10 @@ app.UseSwagger(c =>
         File.WriteAllText(filePath, System.Text.Json.JsonSerializer.Serialize(swaggerDoc));
     });
 });
+
 app.UseSwaggerUI();
+
+app.UseCors();
 
 app.UseAuthorization();
 
