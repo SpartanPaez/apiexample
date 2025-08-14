@@ -13,5 +13,6 @@ public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
         builder.Property(c => c.LastName).HasColumnName("LastName").IsRequired().HasMaxLength(100);
         builder.Property(c => c.Email).HasColumnName("Email").IsRequired().HasMaxLength(200);
         builder.Property(c => c.PhoneNumber).HasColumnName("PhoneNumber").HasMaxLength(15);
+        builder.Property(c => c.PasswordHash).HasColumnName("PasswordHash").IsRequired().HasMaxLength(256);
     }
 }

@@ -33,6 +33,9 @@ namespace WebApi.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("longtext");
 
@@ -43,11 +46,12 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("WebApi.Domain.Entities.Orders.Order", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
 
-                    b.Property<string>("CustomerId")
-                        .HasColumnType("longtext");
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
@@ -79,8 +83,9 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("WebApi.Domain.Entities.Products.Shoe", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Brand")
                         .HasColumnType("longtext");

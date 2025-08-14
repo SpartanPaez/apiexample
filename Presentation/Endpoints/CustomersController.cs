@@ -1,3 +1,4 @@
+
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Domain.Entities.Customers;
 using WebApi.Domain.Repositories.Write;
@@ -9,6 +10,18 @@ namespace WebApi.Presentation.Endpoints;
 [Route("api/[controller]")]
 public class CustomersController : ControllerBase
 {
+    /// <summary>
+    /// Login de cliente. Devuelve JWT si es exitoso.
+    /// </summary>
+    /// <param name="dto">Credenciales de login.</param>
+    /// <returns>JWT o Unauthorized.</returns>
+    [HttpPost("login")]
+    public async Task<ActionResult<string>> Login([FromBody] WebApi.Application.Customers.Commands.LoginCustomerDto dto)
+    {
+        var token = await _mediator.Send(new WebApi.Application.Customers.Commands.LoginCustomerCommand(dto));
+        if (token == null) return Unauthorized();
+        return Ok(token);
+    }
     private readonly ICustomerWriteRepository _customerWriteRepository;
     private readonly IMediator _mediator;
 
@@ -19,14 +32,14 @@ public class CustomersController : ControllerBase
     }
 
     /// <summary>
-    /// Crea un nuevo cliente.
+    /// Registra un nuevo cliente (con password seguro).
     /// </summary>
-    /// <param name="customer">Datos del cliente a crear.</param>
+    /// <param name="dto">Datos del cliente a registrar.</param>
     /// <returns>El cliente creado.</returns>
-    [HttpPost]
-    public async Task<ActionResult> CreateCustomer([FromBody] Customer customer)
+    [HttpPost("register")]
+    public async Task<ActionResult> Register([FromBody] WebApi.Application.Customers.Commands.RegisterCustomerDto dto)
     {
-        var result = await _mediator.Send(new WebApi.Application.Customers.Commands.CreateCustomerCommand(customer));
+        var result = await _mediator.Send(new WebApi.Application.Customers.Commands.RegisterCustomerCommand(dto));
         return CreatedAtAction(nameof(GetCustomerById), new { id = result.Id }, result);
     }
 
