@@ -16,11 +16,11 @@ public class CustomersController : ControllerBase
     /// <param name="dto">Credenciales de login.</param>
     /// <returns>JWT o Unauthorized.</returns>
     [HttpPost("login")]
-    public async Task<ActionResult<string>> Login([FromBody] WebApi.Application.Customers.Commands.LoginCustomerDto dto)
+    public async Task<ActionResult<object>> Login([FromBody] WebApi.Application.Customers.Commands.LoginCustomerDto dto)
     {
-        var token = await _mediator.Send(new WebApi.Application.Customers.Commands.LoginCustomerCommand(dto));
-        if (token == null) return Unauthorized();
-        return Ok(token);
+        var result = await _mediator.Send(new WebApi.Application.Customers.Commands.LoginCustomerCommand(dto));
+        if (result == null) return Unauthorized();
+        return Ok(new { token = result.Token, customerId = result.CustomerId });
     }
     private readonly ICustomerWriteRepository _customerWriteRepository;
     private readonly IMediator _mediator;

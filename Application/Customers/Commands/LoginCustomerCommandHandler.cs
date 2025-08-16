@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace WebApi.Application.Customers.Commands;
 
-public class LoginCustomerCommandHandler : IRequestHandler<LoginCustomerCommand, string?>
+public class LoginCustomerCommandHandler : IRequestHandler<LoginCustomerCommand, LoginCustomerResult?>
 {
     private readonly ICustomerReadRepository _customerReadRepository;
     private readonly IConfiguration _configuration;
@@ -19,7 +19,7 @@ public class LoginCustomerCommandHandler : IRequestHandler<LoginCustomerCommand,
         _configuration = configuration;
     }
 
-    public async Task<string?> Handle(LoginCustomerCommand request, CancellationToken cancellationToken)
+    public async Task<LoginCustomerResult?> Handle(LoginCustomerCommand request, CancellationToken cancellationToken)
     {
         var dto = request.Dto;
         var customers = await _customerReadRepository.GetAllAsync();
@@ -43,7 +43,11 @@ public class LoginCustomerCommandHandler : IRequestHandler<LoginCustomerCommand,
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
-        return tokenHandler.WriteToken(token);
+        return new LoginCustomerResult
+        {
+            Token = tokenHandler.WriteToken(token),
+            CustomerId = customer.Id!
+        };
     }
 
     private static string ComputeSha256Hash(string rawData)
