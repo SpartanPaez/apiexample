@@ -5,9 +5,8 @@ using WebApi.Infrastructure.Persistence.Read;
 using WebApi.Infrastructure.Persistence.Write;
 
 var builder = WebApplication.CreateBuilder(args);
-// Adamspay
 builder.Services.AddHttpClient<WebApi.Infrastructure.Payments.AdamspayService>();
-// Configuración de CORS
+// Configuración de CORS para que funque desde el vps
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>

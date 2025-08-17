@@ -18,7 +18,6 @@ public class RegisterCustomerCommandHandler : IRequestHandler<RegisterCustomerCo
     public async Task<Customer> Handle(RegisterCustomerCommand request, CancellationToken cancellationToken)
     {
         var dto = request.Dto;
-        // Hash simple SHA256
         string passwordHash = ComputeSha256Hash(dto.Password!);
 
         var customer = new Customer

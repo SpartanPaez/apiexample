@@ -29,7 +29,6 @@ public class LoginCustomerCommandHandler : IRequestHandler<LoginCustomerCommand,
         string hash = ComputeSha256Hash(dto.Password!);
         if (customer.PasswordHash != hash) return null;
 
-        // Generar JWT
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]!);
         var tokenDescriptor = new SecurityTokenDescriptor

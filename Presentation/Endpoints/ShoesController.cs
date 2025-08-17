@@ -1,5 +1,3 @@
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
 using WebApi.Application.Queries.Shoes;
 using WebApi.Domain.Entities.Products;
 
