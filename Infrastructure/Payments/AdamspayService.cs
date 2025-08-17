@@ -47,8 +47,7 @@ public async Task<string?> CreatePaymentLink(
 
     var response = await _httpClient.SendAsync(request);
     var json = await response.Content.ReadAsStringAsync();
-    // Log de la respuesta para depuración
-    Console.WriteLine("Respuesta Adamspay: " + json);
+
     if (!response.IsSuccessStatusCode)
         return $"Error Adamspay: {response.StatusCode} - {json}";
     try

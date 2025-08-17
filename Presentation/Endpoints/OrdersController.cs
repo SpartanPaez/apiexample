@@ -1,10 +1,7 @@
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
 using WebApi.Application.Orders.Queries;
 using WebApi.Domain.Entities.Orders;
-using WebApi.Domain.Repositories.Write;
 
-namespace WebApi.Presentation.Endpoints;
+namespace WebApi.Presentation.Controllers.Endpoints;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -24,7 +21,11 @@ public class OrdersController : ControllerBase
     /// </summary>
     /// <param name="id">Identificador de la orden (GUID).</param>
     /// <returns>La orden encontrada o NotFound si no existe.</returns>
+    /// <response code="200">Orden encontrada.</response>
+    /// <response code="404">Orden no encontrada.</response>
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(Order), 200)]
+    [ProducesResponseType(404)]
     public async Task<ActionResult<Order>> GetOrderById(Guid id)
     {
         var order = await _mediator.Send(new GetOrderByIdQuery(id));
@@ -37,7 +38,11 @@ public class OrdersController : ControllerBase
     /// </summary>
     /// <param name="order">Datos de la orden a crear.</param>
     /// <returns>La orden creada.</returns>
+    /// <response code="201">Orden creada exitosamente.</response>
+    /// <response code="400">Datos inválidos.</response>
     [HttpPost]
+    [ProducesResponseType(typeof(Order), 201)]
+    [ProducesResponseType(400)]
     public async Task<ActionResult> CreateOrder([FromBody] Order order)
     {
         var result = await _mediator.Send(new WebApi.Application.Orders.Commands.CreateOrderCommand(order));
